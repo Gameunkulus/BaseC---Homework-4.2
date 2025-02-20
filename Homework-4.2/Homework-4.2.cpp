@@ -64,6 +64,8 @@ public:
     };
 };
 
+
+
 int main()
 {
     setlocale(LC_ALL, "Russian");
@@ -71,7 +73,6 @@ int main()
     int num;
     ifstream in("C:/Users/bugr2/source/repos/Homework-4.2/Homework-4.2/folder/in.txt");
     in >> num;
-    
 
     Adress* arr = new Adress[num];
 
@@ -90,20 +91,36 @@ int main()
         in >> room;
         adr.setRoom(room);
         arr[i] = adr;
-
     }
 
     in.close();
     ofstream out("C:/Users/bugr2/source/repos/Homework-4.2/Homework-4.2/folder/out.txt");
 
-    for (int i = num - 1; num >= 0; num--) {
+    for (int i = 0; i < num; i++) {
+        for (int l = 1; l < num; l++) {
+            if (arr[l].getCity()[0] > arr[l - 1].getCity()[0]) {
+                Adress temp = arr[l];
+                arr[l] = arr[l - 1];
+                arr[l - 1] = temp;
+            } else if (arr[l].getCity()[0] == arr[l - 1].getCity()[0]){
+                    if (arr[l].getStreet()[0] > arr[l - 1].getStreet()[0]){
+                        Adress temp = arr[l];
+                        arr[l] = arr[l - 1];
+                        arr[l - 1] = temp;
+                    }
+            }
+            else { continue; }
+        }
+    }
+
+    for (int i = num - 1; i >= 0; i--) {
         Adress fullAdress = arr[i];
         out << fullAdress.printAdress() << endl;
     }
-    
-    delete arr;
     out.close();
+
 }
+
 
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

@@ -24,20 +24,20 @@ public:
         this->room = 0;
     }
 
-    string getCity() {
-        return city;
+    string *getCity() {
+        return &this->city;
     }
 
     void setCity(string aCity) {
-        city = aCity;
+        this->city = aCity;
     }
 
     string getStreet() {
-        return street;
+        return this->street;
     }
 
     void setStreet(string aStreet) {
-        street = aStreet;
+        this->street = aStreet;
     }
 
     string getDom() {
@@ -59,7 +59,7 @@ public:
     }
 
     string printAdress() {
-        string text = getCity() + " " + getStreet() + " " + getDom() + " " + getRoom();
+        string text = *getCity() + " " + getStreet() + " " + getDom() + " " + getRoom();
         return text;
     };
 };
@@ -77,46 +77,38 @@ int main()
     Adress* arr = new Adress[num];
 
     for (int i = 0; i < num; i++) {
-        Adress adr;
         string city;
         in >> city;
-        adr.setCity(city);
+        arr[i].setCity(city);
         string street;
         in >> street;
-        adr.setStreet(street);
+        arr[i].setStreet(street);
         int dom;
         in >> dom;
-        adr.setDom(dom);
+        arr[i].setDom(dom);
         int room;
         in >> room;
-        adr.setRoom(room);
-        arr[i] = adr;
+        arr[i].setRoom(room);
     }
 
     in.close();
     ofstream out("C:/Users/bugr2/source/repos/Homework-4.2/Homework-4.2/folder/out.txt");
 
-    for (int i = 0; i < num; i++) {
-        for (int l = 1; l < num; l++) {
-            if (arr[l].getCity()[0] > arr[l - 1].getCity()[0]) {
+    for (int i = 0; i < num - 1; i++) {
+        for (int l = 0; l < num - 1; l++) {
+            if (arr[l].getCity()[0] < arr[l + 1].getCity()[0]) {
                 Adress temp = arr[l];
-                arr[l] = arr[l - 1];
-                arr[l - 1] = temp;
-            } else if (arr[l].getCity()[0] == arr[l - 1].getCity()[0]){
-                    if (arr[l].getStreet()[0] > arr[l - 1].getStreet()[0]){
-                        Adress temp = arr[l];
-                        arr[l] = arr[l - 1];
-                        arr[l - 1] = temp;
-                    }
-            }
-            else { continue; }
+                arr[l] = arr[l + 1];
+                arr[l + 1] = temp;
+            } 
         }
     }
 
     for (int i = num - 1; i >= 0; i--) {
-        Adress fullAdress = arr[i];
-        out << fullAdress.printAdress() << endl;
+        cout << arr[i].getCity() << endl;
+        out << arr[i].printAdress() << endl;
     }
+    delete[] arr;
     out.close();
 
 }
